@@ -235,7 +235,8 @@ function consumeSseEvents(buffer) {
 		}
 
 		if (dataParts.length > 0) {
-			events.push(dataParts.join("\n"));
+			const eventData = dataParts.join("\n").trim();
+			events.push(eventData);
 		}
 	}
 
