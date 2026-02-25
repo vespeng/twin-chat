@@ -32,5 +32,8 @@
 		"dev": "wrangler dev",
 		"start": "wrangler dev",
 		"test": "vitest"
+	},
+	"dependencies": {
+		"pnpm": "^10.30.2"
 	}
 }

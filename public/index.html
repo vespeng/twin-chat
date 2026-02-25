@@ -1,40 +1,43 @@
 <!doctype html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
+
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Vespeng AI Chat</title>
 	<link rel="stylesheet" href="styles.css">
 </head>
-<body>
-<header>
-	<h1>Vespeng AI Chat</h1>
-</header>
 
-<div class="chat-container">
-	<div id="chat-messages" class="chat-messages">
-		<div class="message assistant-message">
-			<p>嗨 👋 </br> 我是 Vespeng 的 AI 数字分身 ~ 有什么想聊的或需要帮忙的吗？</p>
+<body>
+	<header>
+		<h1>Vespeng AI Chat</h1>
+	</header>
+
+	<div class="chat-container">
+		<div id="chat-messages" class="chat-messages">
+			<div class="message assistant-message">
+				<p>嗨 👋 </br> 我是 Vespeng 的 AI 数字分身 ~ 有什么想聊的或需要帮忙的吗？</p>
+			</div>
+		</div>
+
+		<div class="typing-indicator" id="typing-indicator">
+			AI is thinking...
 		</div>
 	</div>
 
-	<div class="typing-indicator" id="typing-indicator">
-		AI is thinking...
+	<div class="message-input">
+		<textarea id="user-input" placeholder="Type your message here..." rows="1" autofocus></textarea>
+		<button id="send-button">Send</button>
 	</div>
-</div>
 
-<div class="message-input">
-	<textarea id="user-input" placeholder="Type your message here..." rows="1" autofocus></textarea>
-	<button id="send-button">Send</button>
-</div>
+	<footer>
+		<p>© 2026 Vespeng AI · Cloudflare Workers AI</p>
+	</footer>
 
-<footer>
-	<p>© 2026 Vespeng AI · Cloudflare Workers AI</p>
-</footer>
-
-<!-- 引入 Marked.js 库 -->
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<!-- Chat app script -->
-<script src="chat.js"></script>
+	<!-- 引入 Marked.js 库 -->
+	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+	<!-- Chat app script -->
+	<script src="chat.js"></script>
 </body>
+
 </html>

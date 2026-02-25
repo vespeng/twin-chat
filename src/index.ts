@@ -7,8 +7,9 @@
  *
  * @license MIT
  */
+
 import { Env, ChatMessage } from "./types";
-import SYSTEM_PROMPT from "./system-prompt";
+import SYSTEM_PROMPT from "./prompt";
 
 // Model ID for Workers AI model
 // https://developers.cloudflare.com/workers-ai/models/

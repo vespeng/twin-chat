@@ -2,6 +2,9 @@
  * Type definitions for the LLM chat application.
  */
 
+/**
+ * Represents the environment variables for the LLM chat application.
+ */
 export interface Env {
 	/**
 	 * Binding for the Workers AI API.

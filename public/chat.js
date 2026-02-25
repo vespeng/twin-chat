@@ -211,22 +211,36 @@ function addMessageToChat(role, content) {
 }
 
 function consumeSseEvents(buffer) {
-	let normalized = buffer.replace(/\r/g, "");
+	// 统一所有换行风格
+	const normalized = buffer.replace(/\r\n?/g, "\n");
+
 	const events = [];
-	let eventEndIndex;
-	while ((eventEndIndex = normalized.indexOf("\n\n")) !== -1) {
-		const rawEvent = normalized.slice(0, eventEndIndex);
-		normalized = normalized.slice(eventEndIndex + 2);
+	let pos = 0;
+
+	while (true) {
+		const endIndex = normalized.indexOf("\n\n", pos);
+		if (endIndex === -1) break;
+
+		const rawEvent = normalized.slice(pos, endIndex);
+		pos = endIndex + 2;
 
 		const lines = rawEvent.split("\n");
-		const dataLines = [];
+		const dataParts = [];
+
 		for (const line of lines) {
 			if (line.startsWith("data:")) {
-				dataLines.push(line.slice("data:".length).trimStart());
+				const value = line.slice(5).trimStart();
+				if (value) dataParts.push(value);
 			}
 		}
-		if (dataLines.length === 0) continue;
-		events.push(dataLines.join("\n"));
+
+		if (dataParts.length > 0) {
+			events.push(dataParts.join("\n"));
+		}
 	}
-	return { events, buffer: normalized };
+
+	// 取出剩余部分，并清理尾部无意义换行
+	let remaining = normalized.slice(pos).trimEnd();
+
+	return { events, buffer: remaining };
 }
