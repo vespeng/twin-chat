@@ -3,7 +3,6 @@
 	--primary-hover: #1772F6;
 	--text-color: #000000;
 	--text-light: #282c34;
-	--user-msg-bg: #f0f8ff;
 }
 
 * {
@@ -24,6 +23,9 @@ body {
 	background: #ffffff;
 	height: 100vh;
 	position: relative;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
 }
 
 /* 初始状态：欢迎界面 */
@@ -42,10 +44,6 @@ body:not(.chat-started) .welcome-container {
 	right: 0;
 	bottom: 0;
 	transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-}
-
-.message-input {
-	transition: all 0.4s ease-out;
 }
 
 body:not(.chat-started) .message-input {
@@ -67,6 +65,7 @@ body:not(.chat-started) .message-input {
 	left: 0;
 	right: 0;
 	bottom: 0;
+	text-align: center;
 }
 
 .welcome-container h1 {
@@ -76,7 +75,6 @@ body:not(.chat-started) .message-input {
 	position: absolute;
 	bottom: 50%;
 	transform: translateY(-120%);
-	text-align: center;
 	width: 100%;
 }
 
@@ -88,47 +86,59 @@ body.chat-started .welcome-container {
 body.chat-started .chat-container {
 	display: flex;
 	flex-direction: column;
-	height: calc(100vh - 100px);
+	flex: 1;
+	min-height: 0;
 	margin-top: 0.8rem;
-	animation: fadeInUp 0.5s ease-out;
+	animation: smoothSlideUp 0.4s ease-out;
 }
 
 body.chat-started .message-input {
-	position: static;
+	position: absolute;
+	bottom: 0;
+	left: 0.75rem;
+	right: 0.75rem;
 	padding: 0.8rem;
-	margin-top: auto;
-	animation: slideUp 0.4s ease-out;
+	padding-bottom: 2.4rem;
+	animation: inputSlideToBottom 0.5s ease-out forwards;
 }
 
-/* 过渡动画 */
-@keyframes fadeInUp {
+@keyframes inputSlideToBottom {
 	from {
-		opacity: 0;
-		transform: translateY(20px);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-@keyframes slideUp {
-	from {
+		bottom: 50%;
 		transform: translateY(80%);
+		opacity: 1;
 	}
+
+	to {
+		bottom: 0;
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+/* 平滑过渡动画 */
+@keyframes smoothSlideUp {
+	from {
+		transform: translateY(30px);
+		opacity: 0.8;
+	}
+
 	to {
 		transform: translateY(0);
+		opacity: 1;
 	}
 }
 
-.welcome-container {
-	text-align: center;
-}
+@keyframes messageSlideIn {
+	from {
+		transform: translateY(20px) scale(0.95);
+		opacity: 0;
+	}
 
-.welcome-container h1 {
-	font-size: 1.65rem;
-	color: var(--primary-color);
-	margin-bottom: 2rem;
+	to {
+		transform: translateY(0) scale(1);
+		opacity: 1;
+	}
 }
 
 .chat-container {
@@ -143,27 +153,84 @@ body.chat-started .message-input {
 	padding: 1.5rem;
 }
 
+/* 自定义滚动条样式 */
+.chat-messages::-webkit-scrollbar {
+	width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+	background-color: rgba(0, 0, 0, 0.15);
+	border-radius: 3px;
+	transition: background-color 0.2s;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+	background-color: rgba(0, 0, 0, 0.3);
+}
+
 .message {
-	margin-bottom: 1.2rem;
-	padding: 1rem 1.25rem;
-	border-radius: 18px;
-	max-width: 80%;
+	margin-bottom: 1rem;
+	padding: 0.625rem 1rem;
+	border-radius: 16px;
+	word-wrap: break-word;
+	position: relative;
+	animation: messageSlideIn 0.3s ease-out forwards;
+	transform-origin: center bottom;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.message:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.06);
 }
 
 .message p {
 	white-space: pre-wrap;
 	margin: 0;
-	overflow-wrap: anywhere;
+	overflow-wrap: break-word;
+	word-break: break-word;
+	line-height: 1.5;
 }
 
 .user-message {
-	background-color: var(--user-msg-bg);
+	background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
 	align-self: flex-end;
 	margin-left: auto;
+	max-width: 85%;
+	min-width: fit-content;
+	width: fit-content;
+	border-bottom-right-radius: 4px;
 }
 
 .assistant-message {
+	background: rgba(255, 255, 255, 0.7);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
 	align-self: flex-start;
+	max-width: 85%;
+	min-width: fit-content;
+	width: fit-content;
+	border-bottom-left-radius: 4px;
+	border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* 针对不同长度的文本调整消息气泡宽度 */
+.user-message:has(p:empty) {
+	min-width: 60px;
+}
+
+.user-message:has(p:not(:empty)):not(:has(p br)) {
+	max-width: max(60px, min(85%, fit-content));
+}
+
+.user-message:has(p br) {
+	max-width: 85%;
+	width: 85%;
 }
 
 .message-input {
