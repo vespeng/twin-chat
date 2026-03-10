@@ -313,19 +313,10 @@ body.chat-started .message-input {
 	opacity: 0.6;
 }
 
-.typing-indicator {
-	display: none;
+/* AI 思考时输入框样式 */
+#user-input.thinking {
 	font-style: italic;
 	color: var(--color-text-secondary);
-	padding: 0.8rem 1.5rem;
-	text-align: center;
-	font-size: 0.9rem;
-	flex-shrink: 0;
-	background: var(--color-bg);
-}
-
-.typing-indicator.visible {
-	display: block;
 }
 
 /**

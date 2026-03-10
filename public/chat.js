@@ -8,7 +8,6 @@
 const chatMessages = document.getElementById("chat-messages");
 const userInput = document.getElementById("user-input");
 const sendButton = document.getElementById("send-button");
-const typingIndicator = document.getElementById("typing-indicator");
 const welcomeContainer = document.getElementById("welcome-container");
 const messageInput = document.getElementById("message-input");
 
@@ -70,8 +69,9 @@ async function sendMessage() {
 	userInput.value = "";
 	userInput.style.height = "auto";
 
-	// Show typing indicator
-	typingIndicator.classList.add("visible");
+	// Show typing indicator in input
+	userInput.placeholder = "AI is thinking...";
+	userInput.classList.add("thinking");
 
 	// Add message to history
 	chatHistory.push({ role: "user", content: message });
@@ -196,7 +196,8 @@ async function sendMessage() {
 		);
 	} finally {
 		// Hide typing indicator
-		typingIndicator.classList.remove("visible");
+		userInput.placeholder = "Type your message here...";
+		userInput.classList.remove("thinking");
 
 		// Re-enable input
 		isProcessing = false;
